@@ -1,4 +1,3 @@
-import pygame
 from eventmanager import *
 
 
@@ -12,7 +11,7 @@ class GameEngine:
         @param event_manager: Pointer to EventManager allows us to post messages to the event queue
         """
         self.event_manager = event_manager
-        event_manager.RegisterListener(self)
+        event_manager.register_listener(self)
         # True while the engine is online. Changed via QuitEvent()
         self.running = False
         self.state = StateMachine()
@@ -26,7 +25,7 @@ class GameEngine:
             if not event.state:
                 # false if no more states are left
                 if not self.state.pop():
-                    self.event_manager.Post(QuitEvent())
+                    self.event_manager.post(QuitEvent())
             else:
                 # push a new state on the stack
                 self.state.push(event.state)
@@ -37,14 +36,14 @@ class GameEngine:
         The loop ends when this object hears a QUitEvent in notify()
         """
         self.running = True
-        self.event_manager.Post(InitializeEvent())
+        self.event_manager.post(InitializeEvent())
         # we push our first state to the stack
-        # we out menu is always the first game state
+        # our menu is always the first game state
         # the game always starts from the main menu
         self.state.push(STATE_MENU)
         while self.running:
             new_tick = TickEvent()
-            self.event_manager.Post(new_tick)
+            self.event_manager.post(new_tick)
 
 
 # State machine constants for the StateMachine class below
