@@ -3,7 +3,7 @@ import model
 from eventmanager import *
 
 
-class Keyboard:
+class Keyboard(Listener):
     """Handles keyboard input"""
 
     def __init__(self, event_manager, model_object):
@@ -11,8 +11,7 @@ class Keyboard:
         @param event_manager: Pointer to EventManager allows us to post messages to the event queue
         @param model_object: Pointer to GameEngine: a strong reference to the game Model
         """
-        self.event_manager = event_manager
-        event_manager.register_listener(self)
+        super().__init__(event_manager)  # Register listener to event manager
         self.model = model_object
 
         self.keydown_state_map = {

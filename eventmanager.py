@@ -88,3 +88,15 @@ class EventManager:
 
         for listener in self.listeners:
             listener.notify(event)
+
+
+class Listener:
+    """Base Listener class. Implements registering listeners and
+    an abstract method for notify()ing subscribers.
+    """
+    def __init__(self, event_manager: EventManager):
+        self.event_manager = event_manager
+        event_manager.register_listener(self)
+
+    def notify(self, event):
+        raise NotImplementedError

@@ -3,7 +3,7 @@ import model
 from eventmanager import *
 
 
-class GraphicalView:
+class GraphicalView(Listener):
     """Draws the model state onto the screen"""
 
     def __init__(self, event_manager, model_object):
@@ -11,12 +11,11 @@ class GraphicalView:
         @param event_manager: Pointer to EventManager allows us to post messages to the event queue
         @param model_object: Pointer to GameEngine: a strong reference to the game Model
         """
-        self.event_manager = event_manager
-        event_manager.register_listener(self)
+        super().__init__(event_manager)  # Register listener to event manager
         self.model = model_object
         self.initialized = False
-        # todo type hints ??
-        self.screen: pygame.Surface = None  # the screen surface
+
+        self.screen = None  # the screen surface
         self.clock: pygame.time.Clock = None  # keeps the fps constant
         self.small_font = None  # small font
 

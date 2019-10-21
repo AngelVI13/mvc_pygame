@@ -1,7 +1,7 @@
 from eventmanager import *
 
 
-class GameEngine:
+class GameEngine(Listener):
     """
     Tracks the game state
     """
@@ -10,8 +10,7 @@ class GameEngine:
         """
         @param event_manager: Pointer to EventManager allows us to post messages to the event queue
         """
-        self.event_manager = event_manager
-        event_manager.register_listener(self)
+        super().__init__(event_manager)  # Register listener to event manager
         # True while the engine is online. Changed via QuitEvent()
         self.running = False
         self.state = StateMachine()
