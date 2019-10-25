@@ -58,6 +58,7 @@ class StateMachine:
     peek(), pop() and push() perform as traditionally expected.
     peeking and popping an empty stack returns None,
     """
+
     def __init__(self):
         self.state_stack = []
 
@@ -90,4 +91,3 @@ class StateMachine:
         Returns the pushed value
         """
         self.state_stack.append(state)
-        return state  # todo ???

@@ -33,24 +33,31 @@ class Keyboard(Listener):
                 self.event_manager.post(QuitEvent())
             # handle key down events
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    self.event_manager.post(StateChangeEvent(None))
-                else:
-                    current_state = self.model.state.peek()
+                self.handle_keydown_event(event)
 
-                    try:
-                        handler = self.keydown_state_map[current_state]
-                    except KeyError:
-                        raise Exception(f"Unknown state: {current_state}. No handling defined for state.")
-                    else:
-                        handler(event)
+    def handle_keydown_event(self, event):
+        if event.key == pygame.K_ESCAPE:
+            self.event_manager.post(StateChangeEvent(None))
+            return
+
+        current_state = self.model.state.peek()
+
+        try:
+            handler = self.keydown_state_map[current_state]
+        except KeyError:
+            raise Exception(
+                f"Unknown state: {current_state}. No handling defined for state."
+            )
+        else:
+            handler(event)
 
     def keydown_menu(self, event):
         """Handles menu key events."""
 
         # escape pops the menu
         if event.key == pygame.K_ESCAPE:
-            self.event_manager.post(StateChangeEvent(None))  # todo shady. not intuitive that this pops the state
+            # todo shady. not intuitive that this pops the state
+            self.event_manager.post(StateChangeEvent(None))
 
         # space plays the game
         if event.key == pygame.K_SPACE:
