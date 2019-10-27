@@ -1,3 +1,5 @@
+import pygame
+
 from eventmanager import *
 
 
@@ -5,6 +7,11 @@ class Snake:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.head = pygame.image.load('./assets/snake_head.png')
+        self.body = pygame.image.load('./assets/snake_body.png')
+        self.tail = pygame.image.load('./assets/snake_tail.png')
+
+        self.img_size = 49  # 49 x 49
 
 
 class GameEngine(Listener):
@@ -21,7 +28,7 @@ class GameEngine(Listener):
         self.running = False
         self.state = StateMachine()
 
-        self.snake = Snake()
+        self.snake = Snake(200, 200)
 
     def notify(self, event):
         """Called by an event in the message queue."""

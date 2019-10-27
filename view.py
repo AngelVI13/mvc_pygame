@@ -75,6 +75,11 @@ class GraphicalView(Listener):
             "You are playing the game. F1 for help.", True, pygame.Color("green")
         )
         self.screen.blit(text, (0, 0))
+
+        self.screen.blit(self.model.snake.head, (self.model.snake.x, self.model.snake.y))
+        self.screen.blit(self.model.snake.body, (self.model.snake.x + self.model.snake.img_size, self.model.snake.y))
+        self.screen.blit(self.model.snake.tail, (self.model.snake.x + 2 * self.model.snake.img_size, self.model.snake.y))
+
         pygame.display.flip()
 
     def render_help(self):
