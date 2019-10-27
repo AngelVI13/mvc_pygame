@@ -1,6 +1,12 @@
 from eventmanager import *
 
 
+class Snake:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+
 class GameEngine(Listener):
     """
     Tracks the game state
@@ -14,6 +20,8 @@ class GameEngine(Listener):
         # True while the engine is online. Changed via QuitEvent()
         self.running = False
         self.state = StateMachine()
+
+        self.snake = Snake()
 
     def notify(self, event):
         """Called by an event in the message queue."""
