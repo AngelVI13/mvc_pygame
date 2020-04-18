@@ -1,5 +1,5 @@
 import pygame
-import model
+from model import States
 from eventmanager import *
 
 
@@ -15,9 +15,9 @@ class Keyboard(Listener):
         self.model = model_object
 
         self.keydown_state_map = {
-            model.STATE_MENU: self.keydown_menu,
-            model.STATE_HELP: self.keydown_help,
-            model.STATE_PLAY: self.keydown_play,
+            States.STATE_MENU: self.keydown_menu,
+            States.STATE_HELP: self.keydown_help,
+            States.STATE_PLAY: self.keydown_play,
         }
 
     def notify(self, event):
@@ -42,14 +42,13 @@ class Keyboard(Listener):
 
         current_state = self.model.state.peek()
 
-        try:
-            handler = self.keydown_state_map[current_state]
-        except KeyError:
+        handler = self.keydown_state_map.get(current_state)
+        if handler is None:
             raise Exception(
                 f"Unknown state: {current_state}. No handling defined for state."
             )
-        else:
-            handler(event)
+        
+        handler(event)
 
     def keydown_menu(self, event):
         """Handles menu key events."""
@@ -61,7 +60,7 @@ class Keyboard(Listener):
 
         # space plays the game
         if event.key == pygame.K_SPACE:
-            self.event_manager.post(StateChangeEvent(model.STATE_PLAY))
+            self.event_manager.post(StateChangeEvent(States.STATE_PLAY))
 
     def keydown_help(self, event):
         """Handles help key events"""
@@ -76,6 +75,6 @@ class Keyboard(Listener):
 
         # F1 shows the help
         if event.key == pygame.K_F1:
-            self.event_manager.post(StateChangeEvent(model.STATE_HELP))
+            self.event_manager.post(StateChangeEvent(States.STATE_HELP))
         else:
             self.event_manager.post(InputEvent(event.unicode, None))

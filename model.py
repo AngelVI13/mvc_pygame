@@ -1,17 +1,7 @@
 import pygame
+from enum import Enum, auto
 
 from eventmanager import *
-
-
-class Snake:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.head = pygame.image.load('./assets/snake_head.png')
-        self.body = pygame.image.load('./assets/snake_body.png')
-        self.tail = pygame.image.load('./assets/snake_tail.png')
-
-        self.img_size = 49  # 49 x 49
 
 
 class GameEngine(Listener):
@@ -28,22 +18,21 @@ class GameEngine(Listener):
         self.running = False
         self.state = StateMachine()
 
-        self.snake = Snake(200, 200)
-
     def notify(self, event):
         """Called by an event in the message queue."""
         if isinstance(event, QuitEvent):
             self.running = False
         if isinstance(event, StateChangeEvent):
-            # pop request
-            if not event.state:
-                # false if no more states are left
-                if not self.state.pop():
-                    self.event_manager.post(QuitEvent())
-            else:
+            if event.state:
                 # push a new state on the stack
                 self.state.push(event.state)
+                return
 
+            # pop request
+            # false if no more states are left
+            if not self.state.pop():
+                self.event_manager.post(QuitEvent())
+                
     def run(self):
         """Starts the game engine loop.
         This pumps a Tick event into the message queue for each loop.
@@ -54,18 +43,21 @@ class GameEngine(Listener):
         # we push our first state to the stack
         # our menu is always the first game state
         # the game always starts from the main menu
-        self.state.push(STATE_MENU)
+        self.state.push(States.STATE_MENU)
         while self.running:
             new_tick = TickEvent()
             self.event_manager.post(new_tick)
 
 
-# State machine constants for the StateMachine class below
-STATE_INTRO = 1
-STATE_MENU = 2
-STATE_HELP = 3
-STATE_ABOUT = 4
-STATE_PLAY = 5
+class States(Enum):
+    """
+    State machine constants for the StateMachine class
+    """
+    STATE_INTRO = auto()
+    STATE_MENU = auto()
+    STATE_HELP = auto()
+    STATE_ABOUT = auto()
+    STATE_PLAY = auto()
 
 
 class StateMachine:

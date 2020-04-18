@@ -1,7 +1,7 @@
 from typing import Tuple
 
 import pygame
-from model import GameEngine, STATE_MENU, STATE_HELP, STATE_PLAY
+from model import GameEngine, States
 from eventmanager import *
 
 
@@ -50,11 +50,11 @@ class GraphicalView(Listener):
                 return
 
             current_state = self.model.state.peek()
-            if current_state == STATE_MENU:
+            if current_state == States.STATE_MENU:
                 self.render_menu()
-            if current_state == STATE_PLAY:
+            if current_state == States.STATE_PLAY:
                 self.render_play()
-            if current_state == STATE_HELP:
+            if current_state == States.STATE_HELP:
                 self.render_help()
             # limit the redraw speed to 30 frames per second
             self.clock.tick(self.fps)
@@ -75,10 +75,6 @@ class GraphicalView(Listener):
             "You are playing the game. F1 for help.", True, pygame.Color("green")
         )
         self.screen.blit(text, (0, 0))
-
-        self.screen.blit(self.model.snake.head, (self.model.snake.x, self.model.snake.y))
-        self.screen.blit(self.model.snake.body, (self.model.snake.x + self.model.snake.img_size, self.model.snake.y))
-        self.screen.blit(self.model.snake.tail, (self.model.snake.x + 2 * self.model.snake.img_size, self.model.snake.y))
 
         pygame.display.flip()
 
